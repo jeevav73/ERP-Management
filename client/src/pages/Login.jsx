@@ -33,7 +33,8 @@ export default function Login() {
 
             localStorage.setItem("token", res.data.token);
             localStorage.setItem("role", res.data.role);
-            localStorage.setItem("email", email);
+            localStorage.setItem("name", res.data.name);
+            localStorage.setItem("email", res.data.email);
             showToast("Login successful");
             // 🔥 redirect after login
             if (res.data.role === "admin") navigate("/admin");
@@ -102,7 +103,7 @@ export default function Login() {
             Login
           </button>
 
-          <p className="mt-4 text-sm text-gray-600 text-center">
+          {/* <p className="mt-4 text-sm text-gray-600 text-center">
             Don’t have an account?{" "}
             <span
               onClick={() => navigate("/register")}
@@ -110,7 +111,7 @@ export default function Login() {
             >
               Register
             </span>
-          </p>
+          </p> */}
 
         </div>
       </div>

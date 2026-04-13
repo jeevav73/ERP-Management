@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { CheckCircle } from "lucide-react";
 
 export default function SuccessPage() {
   const location = useLocation();
@@ -7,24 +8,31 @@ export default function SuccessPage() {
   const { name, entryTime } = location.state || {};
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-green-50">
-      <div className="bg-white p-8 rounded-2xl shadow-md text-center">
-        
-        <h1 className="text-2xl font-bold text-green-600 mb-3">
-          ✅ Check-In Successful
-        </h1>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 flex items-center justify-center p-4">
+      <div className="bg-white rounded-3xl shadow-2xl p-10 max-w-md w-full text-center">
+        <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <CheckCircle size={40} className="text-emerald-500" />
+        </div>
 
-        <p className="text-gray-600 mb-2">
-          Welcome, <b>{name}</b>
-        </p>
+        <h2 className="text-2xl font-bold text-slate-800 mb-2">You're Checked In!</h2>
+        <p className="text-slate-500 mb-6 text-sm">Your registration has been submitted successfully.</p>
 
-        <p className="text-sm text-gray-500 mb-6">
-          Entry Time: {entryTime ? new Date(entryTime).toLocaleString() : ""}
-        </p>
+        <div className="bg-slate-50 rounded-2xl p-5 text-left space-y-3 mb-6">
+          <div className="flex justify-between text-sm">
+            <span className="text-slate-500">Name</span>
+            <span className="font-medium text-slate-800">{name}</span>
+          </div>
+          <div className="flex justify-between text-sm">
+            <span className="text-slate-500">Entry Time</span>
+            <span className="font-medium text-slate-800">
+              {entryTime ? new Date(entryTime).toLocaleString() : ""}
+            </span>
+          </div>
+        </div>
 
         <button
-          onClick={() => navigate("/visitor")}
-          className="bg-blue-600 text-white px-5 py-2 rounded-xl"
+          onClick={() => navigate("/jobform")}
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 hover:-translate-y-0.5 shadow-lg shadow-blue-200"
         >
           New Entry
         </button>

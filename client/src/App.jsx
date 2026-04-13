@@ -10,6 +10,7 @@ import AnalyticsPage from "./pages/AnalyticsPage";
 import SettingsPage from "./pages/SettingPage";
 import VisitorRegistration from "./components/dashboards/visitors/VisitorRegistration";
 import SuccessPage from "./components/dashboards/visitors/SuccessPage";
+import JobRegistorForm from "./components/dashboards/visitors/JobRegistorForm";
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/visitor" element={<VisitorRegistration />} />
           <Route path="/success" element={<SuccessPage />} />
+          <Route path="/jobform" element={<JobRegistorForm />} />
           <Route
             path="/admin"
             element={

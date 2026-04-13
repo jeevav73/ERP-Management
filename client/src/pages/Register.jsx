@@ -1,133 +1,151 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { User, Mail, Lock, Phone, Shield, ChevronRight, X } from "lucide-react";
 
-export default function Register() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [phone, setPhone] = useState("");  // ✅ NEW: Phone number state
-  const [role, setRole] = useState("user");
+export default function Register({ onClose }) {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    phone: "",
+    role: "user",
+  });
 
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const register = async () => {
-    if (!name || !email || !password || !phone) {
-      alert("All fields required");  // ✅ CHANGE: Added phone validation
+    if (!form.name || !form.email || !form.password || !form.phone) {
+      alert("All fields required");
       return;
     }
+
     try {
-      await axios.post("http://localhost:8000/api/auth/register", {
-        name,
-        email,
-        password,
-        phone,  // ✅ CHANGE: Added phone to API request
-        role
-      });
-
-      alert("Registered successfully");
-
-      // 👉 after register go to login
-      navigate("/");
-
+      setLoading(true);
+      await axios.post("http://localhost:8000/api/auth/register", form);
+      alert("User created successfully ✅");
+      onClose && onClose();
     } catch (err) {
       alert(err.response?.data || "Error");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="w-full max-w-md bg-white rounded-2xl shadow-lg border border-slate-200 p-6">
 
-      {/* LEFT SIDE (same as login) */}
-      <div className="w-1/2 flex items-center justify-center bg-gradient-to-br from-blue-600 to-indigo-700 text-white p-12">
+      {/* Header */}
+      <div className="flex items-start justify-between mb-6">
+        <div>
+          <h2 className="text-lg font-semibold text-slate-800">Create New User</h2>
+          <p className="text-sm text-slate-400 mt-0.5">Add a new user to the system</p>
+        </div>
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-colors"
+          >
+            <X size={15} className="text-slate-500" />
+          </button>
+        )}
+      </div>
+
+      {/* Fields */}
+      <div className="space-y-4">
 
         <div>
-          <h1 className="text-5xl font-bold mb-6">
-            Join Us 🚀
-          </h1>
-
-          <p className="text-lg mb-6">
-            Create your account and access the role-based system.
-          </p>
-
-          <ul className="space-y-3 text-lg">
-            <li>🔐 Secure Authentication</li>
-            <li>👥 Multiple Roles</li>
-            <li>📊 Activity Tracking</li>
-            <li>⚡ Fast & Easy Access</li>
-          </ul>
-
-          <p className="mt-10 text-sm opacity-80">
-            Start your journey with our platform.
-          </p>
+          <label className="block text-sm font-medium text-slate-600 mb-1.5">Full Name</label>
+          <div className="relative">
+            <User size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+            <input
+              className="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              placeholder="Enter name"
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+            />
+          </div>
         </div>
 
-      </div>
+        <div>
+          <label className="block text-sm font-medium text-slate-600 mb-1.5">Email</label>
+          <div className="relative">
+            <Mail size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+            <input
+              className="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              placeholder="Enter email"
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+            />
+          </div>
+        </div>
 
-      {/* RIGHT SIDE (Glass Form) */}
-      <div className="w-1/2 flex items-center justify-center bg-gray-100">
+        <div>
+          <label className="block text-sm font-medium text-slate-600 mb-1.5">Password</label>
+          <div className="relative">
+            <Lock size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+            <input
+              type="password"
+              className="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              placeholder="Enter password"
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
+            />
+          </div>
+        </div>
 
-        <div className="bg-white/70 backdrop-blur-lg shadow-xl rounded-2xl p-10 w-96 border">
+        <div>
+          <label className="block text-sm font-medium text-slate-600 mb-1.5">Phone</label>
+          <div className="relative">
+            <Phone size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+            <input
+              className="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              placeholder="+91XXXXXXXXXX"
+              onChange={(e) => setForm({ ...form, phone: e.target.value })}
+            />
+          </div>
+        </div>
 
-          <h2 className="text-3xl font-bold mb-6 text-gray-800 text-center">
-            Register
-          </h2>
-
-          <input
-            placeholder="Name"
-            className="w-full p-3 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            onChange={(e) => setName(e.target.value)}
-          />
-
-          <input
-            placeholder="Email"
-            className="w-full p-3 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full p-3 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-
-          {/* ✅ NEW: Phone Number Input */}
-          <input
-            placeholder="Phone Number (e.g., +919943958576)"
-            className="w-full p-3 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            onChange={(e) => setPhone(e.target.value)}
-          />
-
-          {/* Role Dropdown */}
-          <select
-            className="w-full p-3 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            onChange={(e) => setRole(e.target.value)}
-          >
-            <option value="user">User</option>
-            <option value="manager">Manager</option>
-            <option value="admin">Admin</option>
-          </select>
-
-          <button
-            onClick={register}
-            className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-300 shadow-md"
-          >
-            Register
-          </button>
-
-          <p className="mt-4 text-sm text-gray-600 text-center">
-            Already have an account?{" "}
-            <span
-              onClick={() => navigate("/")}
-              className="text-blue-600 cursor-pointer font-medium"
+        <div>
+          <label className="block text-sm font-medium text-slate-600 mb-1.5">Role</label>
+          <div className="relative">
+            <Shield size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+            <select
+              className="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all appearance-none bg-white"
+              onChange={(e) => setForm({ ...form, role: e.target.value })}
             >
-              Login
-            </span>
-          </p>
-
+              <option value="user">User</option>
+              <option value="manager">Manager</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
         </div>
+
       </div>
+
+      {/* Buttons */}
+      <div className="flex gap-3 mt-6">
+        <button
+          onClick={onClose}
+          className="flex-1 py-2.5 rounded-lg border border-slate-200 text-slate-600 text-sm font-medium hover:bg-slate-50 transition-all"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={register}
+          disabled={loading}
+          className="flex-1 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white text-sm font-medium flex items-center justify-center gap-2 transition-all duration-200"
+        >
+          {loading ? (
+            <>
+              <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              Creating...
+            </>
+          ) : (
+            <>
+              Create User
+              <ChevronRight size={15} />
+            </>
+          )}
+        </button>
+      </div>
+
     </div>
   );
 }
